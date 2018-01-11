@@ -8,7 +8,7 @@ import (
 
 type Task struct {
 	store  store.Manager
-	Routes []model.Routes
+	Routes model.Routes
 	Prefix string
 }
 
@@ -51,7 +51,7 @@ func NewTask(m store.Manager) *Task {
 			Pattern:     prefix + "/{id}",
 			HandlerFunc: t.Delete,
 		},
-	})
+	}...)
 
 	return t
 }

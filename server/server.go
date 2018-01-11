@@ -6,6 +6,7 @@ import (
 	"todo/controller"
 	"todo/handler"
 	"todo/model"
+	"todo/store"
 )
 
 var routes = model.Routes{}
@@ -21,8 +22,13 @@ func getRouter() http.Handler {
 	indexController := controller.NewIndex()
 	routes := append(routes, indexController.Routes...)
 
-	//taskController := controller.NewTask()
-	//routes = append(routes, taskController.Routes...)
+	m, err := store.CreateManager(store.MockType)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	taskController := controller.NewTask(m)
+	routes = append(routes, taskController.Routes...)
 
 	return handler.NewRouter(routes)
 }
