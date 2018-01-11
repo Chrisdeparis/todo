@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 	"todo/model"
+
+	"github.com/gorilla/mux"
 )
 
 func SendJSONWithStatus(w http.ResponseWriter, v interface{}, status int) {
@@ -32,4 +34,8 @@ func SendJSONError(w http.ResponseWriter, message string, code int) {
 func ParseJSON(r *http.Request, v interface{}) error {
 	defer r.Body.Close()
 	return json.NewDecoder(r.Body).Decode(v)
+}
+
+func GetParams(key string, r *http.Request) string {
+	return mux.Vars(r)[key]
 }
