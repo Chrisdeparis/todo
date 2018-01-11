@@ -1,10 +1,14 @@
 package main
 
-import "todo/server"
+import (
+	"flag"
+	"todo/server"
+)
 
-// export GOPATH=/home/dev/go
-// go get github.com/satori/go.uuid
-// go get github.com/gorilla/mux
+var addr = flag.String("addr", ":3000", "Server host")
+
 func main() {
-	server.Listen(":7070")
+	flag.Parse()
+
+	server.Listen(*addr)
 }
