@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"log"
 	"net/http"
+	"todo/handler"
 	"todo/model"
 	"todo/store"
 )
@@ -58,12 +60,30 @@ func NewTask(m store.Manager) *Task {
 
 // All returns all tasks.
 func (t *Task) All(w http.ResponseWriter, r *http.Request) {
+	var err error
 
 }
 
 // Create creates a new task.
+// http://localhost:7070/todo/tasks (POST)
 func (t *Task) Create(w http.ResponseWriter, r *http.Request) {
+	task := &model.Task{}
 
+	err := handler.ParseJSON(r, task)
+	if err != nil {
+		log.Println(err)
+		handler.SendJSONError(w, "Error while decoding to create", http.StatusBadRequest)
+		return
+	}
+
+	err = t.store.Create(task)
+	if err != nil {
+		log.Println(err)
+		handler.SendJSONError(w, "Error while creating task", http.StatusInternalServerError)
+		return
+	}
+
+	handler.SendJSONWithStatus(w, task, http.StatusCreated)
 }
 
 // FindById find a task by its ID.
