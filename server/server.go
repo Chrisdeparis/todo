@@ -18,6 +18,14 @@ func Listen(addr string) {
 	}
 }
 
+func ListenTLS(addr string) {
+	sslPath := "etc/ssl"
+	err := http.ListenAndServeTLS(addr, sslPath+"/server.crt", sslPath+"/server.key", getRouter())
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func getRouter() http.Handler {
 	indexController := controller.NewIndex()
 	routes := append(routes, indexController.Routes...)
