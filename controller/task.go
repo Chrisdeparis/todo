@@ -3,6 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"todo/handler"
 	"todo/model"
 	"todo/store"
@@ -62,6 +63,27 @@ func NewTask(m store.Manager) *Task {
 func (t *Task) All(w http.ResponseWriter, r *http.Request) {
 	var err error
 
+	offset := store.NoPaging
+	limit := store.NoPaging
+
+	offset, err = strconv.Atoi(handler.GetParams("offset", r))
+	if err != nil {
+		offset = store.NoPaging
+	}
+
+	limit, err = strconv.Atoi(handler.GetParams("limit", r))
+	if err != nil {
+		limit = store.NoPaging
+	}
+
+	tasks, err := t.store.All(offset, limit)
+	if err != nil {
+		log.Println(err)
+		handler.SendJSONError(w, "Error while retrieving tasks", http.StatusInternalServerError)
+		return
+	}
+
+	handler.SendJSONOk(w, &tasks)
 }
 
 // Create creates a new task.
