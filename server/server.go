@@ -41,7 +41,9 @@ func getRouter() http.Handler {
 	var h http.Handler
 
 	h = handler.NewRouter(routes)
+	h = handler.Logger(h)
 	h = handler.Recover(h)
+	h = handler.Cors(h)
 
 	return h
 }
