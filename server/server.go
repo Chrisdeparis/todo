@@ -30,7 +30,7 @@ func getRouter() http.Handler {
 	indexController := controller.NewIndex()
 	routes := append(routes, indexController.Routes...)
 
-	m, err := store.CreateManager(store.MockType)
+	m, err := store.CreateManager(store.MongoType)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -41,7 +41,7 @@ func (m *mongo) Find(ID string) (*model.Task, error) {
 	defer session.Close()
 	c := session.DB("").C(collection)
 
-	var task *model.Task
+	task := &model.Task{}
 	err := c.FindId(ID).One(task)
 
 	return task, err
@@ -71,8 +71,6 @@ func (m *mongo) All(offset, limit int) ([]model.Task, error) {
 
 func (m *mongo) findAllBy(query interface{}) *pagination {
 	session := m.session.Copy()
-	defer session.Close()
-
 	c := session.DB("").C(collection)
 
 	return &pagination{query: c.Find(query)}
