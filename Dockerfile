@@ -12,6 +12,7 @@ RUN apk add --no-cache git \
     && mkdir -p /go/src/todo \
     && go get github.com/satori/go.uuid \
     && go get github.com/gorilla/mux \
+    && go get gopkg.in/mgo.v2 \
     && go install todo \
     && apk del git
 

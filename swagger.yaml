@@ -1,0 +1,149 @@
+swagger: '2.0'
+
+info:
+  title: TodoList API
+  description: Basic todo list api (RESTFul)
+  version: '0.0.1'
+  contact:
+    email: vincent@nanoninja.com
+
+schemes:
+  - http
+  - https
+
+#host: api.ipssi-ecole.com
+#basePath: /v1
+
+paths:
+  /tasks:
+    post:
+      description: Create a new task.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/Task'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+    put:
+      description: Update task by its ID.
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Task'
+      responses:
+        204:
+          description: No Content
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+        default:
+          description: Unexpected Exception
+          schema:
+            $ref: '#/definitions/Error'
+    get:
+      description: Retrieve all tasks.
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          type: integer
+        - name: limit
+          in: query
+          required: false
+          type: integer
+      produces:
+        - application/json
+      responses:
+        200:
+          description: An array of task
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Task'
+        default:
+          description: Unexpected Exception
+          schema:
+            $ref: '#/definitions/Error'
+
+  /tasks/{id}:
+    get:
+      description: Retrieve a task by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Task'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/Error'
+
+    delete:
+      description: Delete a task by its ID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        204:
+          description: No Content
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Error'
+
+definitions:
+  Task:
+    type: object
+    properties:
+      id:
+        type: string
+        description: |
+          Unique indentifier representing a specific task for a given UUID.
+      title:
+        type: string
+        description: |
+          Title representing the title of task.
+      created_at:
+        type: string
+        format: dateTime
+        description: |
+          The date time of created task.
+      status:
+        type: boolean
+        description: Task is done or not.
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
