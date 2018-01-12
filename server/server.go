@@ -38,5 +38,10 @@ func getRouter() http.Handler {
 	taskController := controller.NewTask(m)
 	routes = append(routes, taskController.Routes...)
 
-	return handler.NewRouter(routes)
+	var h http.Handler
+
+	h = handler.NewRouter(routes)
+	h = handler.Recover(h)
+
+	return h
 }
